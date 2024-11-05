@@ -29,31 +29,38 @@ public:
 
     // add new Node based on next available child
     void addNode(Node<T>* someNode, Node<T>* parent) {
-        if (getRoot() == nullptr) {
-            setRoot(someNode);
-        }
-        else if (parent->getLeft() == nullptr) {
-            parent->setLeft(someNode);
-        }
-        else if (parent->getRight() == nullptr) {
-            parent->setRight(someNode);
-        }
-        else {
-            // if current node has all children filled up, create a queue and store their left and right childrens. left first
-            queue<Node<T>*> storyQueue;
-            if (parent->getLeft() != nullptr) {
-                storyQueue.push(parent->getLeft());
+        queue<Node<T>*> storyQueue;
+        // this really only occurs once
+        do {
+            if (getRoot() == nullptr) {
+                setRoot(someNode);
             }
-            if (parent->getRight() != nullptr){
-                storyQueue.push(parent->getLeft()); 
+
+            else if (parent->getLeft() == nullptr && (parent->getLeftEvent() == someNode->getEventNumber())) {
+                parent->setLeft(someNode);
             }
-            // update parent node to first node in queue
-            parent = storyQueue.front();
-            // remove queue
-            storyQueue.pop();
-            // recursively add node with updated parent
-            addNode(someNode, parent);
-        }
+            else if (parent->getRight() == nullptr && (parent->getRightEvent() == someNode->getEventNumber())) {
+                parent->setRight(someNode);
+            }
+            else {
+                // if current node has all children filled up, create a queue and store their left and right childrens; left first
+
+                if (parent->getLeft() != nullptr) {
+                    storyQueue.push(parent->getLeft());
+                }
+                if (parent->getRight() != nullptr) {
+                    storyQueue.push(parent->getRight());
+                }
+                // update parent node to first node in queue
+                if (!storyQueue.empty()) {
+                    parent = storyQueue.front();
+                    // remove queue
+                    storyQueue.pop();
+                    // recursively add node with updated parent
+                    addNode(someNode, parent);
+                }
+            }
+        } while (!storyQueue.empty());
     }
     // Function to load story data from a text file and build the binary tree
     void loadStoryFromFile(const string& filename, char delimiter) {
@@ -76,6 +83,7 @@ public:
         // Story.txt file sets up each line using the following format:
         // Event Number | Description | Left Event | Right Event
         while (getline(file, line)) {
+            cout << line << endl;
             string token; // separated string
             size_t pos = 0; // position of delimiter
             int data = 0; // data keeps track of delimited stuff embedded in each line in Story.txt

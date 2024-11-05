@@ -3,6 +3,9 @@
 
 #include "HeapSort.h"
 #include <iostream>
+#include <iterator>
+#include <algorithm>
+
 using namespace std;
 
 // Function to print the array
@@ -48,9 +51,6 @@ void heapify(int arr[], int n) {
         root++;
         leftchild = 2 * root + 1;
         rightchild = 2 * root + 2;
-        cout << "Heapify Iteration: " << root << endl;
-        printArray(arr, n);
-         cout << endl;
     }
 }
 
@@ -66,13 +66,14 @@ void heapSort(int arr[], int n) {
     // root of min heap is always the minimum number
 
     // Step 3: Down Heapify
-    // THIS SECTION IS NOT YET FUNCTIONAL
+    // After performing the heapify, the array is sorted in DESCENDING ORDER
     for (int i = 1; i < n; i++) {
-        arr[0] = arr[n - i];
+        //swap first and last
+        swap(arr[0], arr[n - i]);
+
+        // perform min heap sort again with violated heap to get the next minimum at the root
         heapify(arr, n - i);
-        arr[i] = arr[0]; // sort the next element
     }
-    
 }
 
 int main() {
@@ -87,7 +88,10 @@ int main() {
     heapSort(arr, n);
 
     cout << "Sorted array:\n";
+    // Recall that the array is sorted in DESCENDING ORDER
+    reverse(begin(arr), end(arr));
     printArray(arr, n);
+    
 
     return 0;
 }

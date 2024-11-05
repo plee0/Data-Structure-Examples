@@ -10,6 +10,7 @@ public:
 
     Node(T value) : data(value), left(nullptr), right(nullptr) {}
 
+    // setters to set the right and left nodes
     void setLeft( Node<T>* someNode ) {
         this->left = someNode;
     }
@@ -18,6 +19,7 @@ public:
         this->right = someNode;
     }
 
+    // getters to return the left and right nodes, if available
     Node<T>* getLeft() {
         return left;
     }
@@ -25,6 +27,20 @@ public:
     Node<T>* getRight() {
         return right;
     }
+    
+    // getters to return the integer data of each story
+    int getEventNumber() {
+        return data.eventNumber;
+    }
+    
+    int getLeftEvent() {
+        return data.leftEventNumber;
+    }
+
+    int getRightEvent() {
+        return data.rightEventNumber;
+    }
+
 };
 
 
