@@ -1,2 +1,4 @@
 # Ignore all .vs visual studio folders
 */.vs
+# Ignore all debug out files
+*/out
